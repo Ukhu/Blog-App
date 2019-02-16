@@ -3,7 +3,7 @@ const express = require("express");
 const logger = require("morgan");
 const path = require("path");
 const okta = require("@okta/okta-sdk-nodejs");
-const session = require("session");
+const session = require("express-session");
 const ExpressOIDC = require("@okta/oidc-middleware").ExpressOIDC;
 
 const blogRouter = require("./routes/blog");
@@ -18,7 +18,7 @@ const client = new okta.Client({
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-//Middleware
+// Middleware
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -35,7 +35,7 @@ const oidc = new ExpressOIDC({
       path: "/users/login"
     },
     callback: {
-      path: "users/callback",
+      path: "/users/callback",
       defaultRedirect: "/dashboard"
     }
   }
@@ -43,9 +43,9 @@ const oidc = new ExpressOIDC({
 
 app.use(
   session({
-    secret: "eebfqhenfwmciqjeuihwnefunhvygfeygwmvce",
+    secret: "bjknbhbfkwnfrhbgfverhgnuehungcmsguibnjgrg",
     resave: true,
-    saveUninitialised: false
+    saveUninitialized: false
   })
 );
 
@@ -63,11 +63,11 @@ app.use((req, res, next) => {
   });
 });
 
-//Routes
+// Routes
 app.use("/", blogRouter);
 app.use("/users", usersRouter);
 
-//Error handlers
+// Error handlers
 app.use(function(req, res, next) {
   next(createError(404));
 });

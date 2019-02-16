@@ -7,8 +7,8 @@ const slugify = require("slugify");
 const models = require("../models");
 
 const client = new okta.Client({
-  orgUrl: "{yourOktaOrgUrl}",
-  token: "{yourOktaToken}"
+  orgUrl: "https://dev-914359.oktapreview.com",
+  token: "00m5N94u1XxKRHgEI2NYS1Vrfswydwh3SLnxFgWEhP"
 });
 const router = express.Router();
 
