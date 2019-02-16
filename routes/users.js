@@ -1,9 +1,16 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+const router = express.Router();
+
+// Okta already handles most of the user functionality
+// not much needed to be done again. Although they've provided a
+// logout helper it doesn't create an actual route
+// so we need to do that here
+
+// Log a user out
+router.get("/logout", (req, res, next) => {
+  req.logout();
+  res.redirect("/");
 });
 
-module.exports = router;
+modules.exports = router;
