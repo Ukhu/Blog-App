@@ -1,15 +1,11 @@
 const async = require("async");
 const express = require("express");
-const okta = require("@okta/okta-sdk-nodejs");
 const sequelize = require("sequelize");
 const slugify = require("slugify");
+const octaCred = require("../octaCredentials");
 
 const models = require("../models");
 
-const client = new okta.Client({
-  orgUrl: "https://dev-914359.oktapreview.com",
-  token: "00m5N94u1XxKRHgEI2NYS1Vrfswydwh3SLnxFgWEhP"
-});
 const router = express.Router();
 
 // Only let the user access the route if they are authenticated.
@@ -32,7 +28,7 @@ router.get("/", (req, res) => {
       posts,
       (post, callback) => {
         post = post.get({ plain: true });
-        client
+        octaCred.client
           .getUser(post.authorId)
           .then(user => {
             postData.push({
@@ -122,7 +118,7 @@ router.get("/:slug/edit", ensureAuthenticated, (req, res, next) => {
     }
 
     post = post.get({ plain: true });
-    client.getUser(post.authorId).then(user => {
+    octaCred.client.getUser(post.authorId).then(user => {
       post.authorName = user.profile.firstName + " " + user.profile.lastName;
       res.render("edit", { post });
     });
@@ -154,7 +150,7 @@ router.post("/:slug/edit", ensureAuthenticated, (req, res, next) => {
       })
       .then(() => {
         post = post.get({ plain: true });
-        client.getUser(post.authorId).then(user => {
+        octaCred.client.getUser(post.authorId).then(user => {
           post.authorName =
             user.profile.firstName + " " + user.profile.lastName;
           res.redirect("/" + slugify(req.body.title).toLowerCase());
@@ -202,7 +198,7 @@ router.get("/:slug", (req, res, next) => {
     }
 
     post = post.get({ plain: true });
-    client.getUser(post.authorId).then(user => {
+    octaCred.client.getUser(post.authorId).then(user => {
       post.authorName = user.profile.firstName + " " + user.profile.lastName;
       res.render("post", { post });
     });
